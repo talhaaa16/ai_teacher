@@ -5,7 +5,6 @@ import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-// Create axios instance
 const apiClient = axios.create({
     baseURL: `${API_URL}/api/v1`,
     headers: {
@@ -13,7 +12,6 @@ const apiClient = axios.create({
     },
 });
 
-// Request interceptor to add auth token
 apiClient.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('auth_token');
@@ -27,12 +25,10 @@ apiClient.interceptors.request.use(
     }
 );
 
-// Response interceptor for error handling
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Unauthorized - clear token and redirect to login
             localStorage.removeItem('auth_token');
             window.location.href = '/login';
         }
@@ -40,14 +36,12 @@ apiClient.interceptors.response.use(
     }
 );
 
-// Auth API
 export const authAPI = {
     getGitHubLoginUrl: () => apiClient.get('/auth/github/login/'),
     getCurrentUser: () => apiClient.get('/auth/me/'),
     logout: () => apiClient.post('/auth/logout/'),
 };
 
-// Projects API
 export const projectsAPI = {
     list: () => apiClient.get('/projects/'),
     get: (id: string) => apiClient.get(`/projects/${id}/`),
@@ -57,7 +51,6 @@ export const projectsAPI = {
     delete: (id: string) => apiClient.delete(`/projects/${id}/`),
 };
 
-// Tasks API
 export const tasksAPI = {
     list: (params?: any) => apiClient.get('/tasks/', { params }),
     get: (id: string) => apiClient.get(`/tasks/${id}/`),
@@ -67,13 +60,12 @@ export const tasksAPI = {
     review: (id: string) => apiClient.post(`/tasks/${id}/review/`),
 };
 
-// Code Reviews API
+
 export const reviewsAPI = {
     list: (params?: any) => apiClient.get('/reviews/', { params }),
     get: (id: string) => apiClient.get(`/reviews/${id}/`),
 };
 
-// Conversations API
 export const conversationsAPI = {
     list: () => apiClient.get('/conversations/'),
     get: (id: string) => apiClient.get(`/conversations/${id}/`),

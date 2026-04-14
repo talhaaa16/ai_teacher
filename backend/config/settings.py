@@ -6,19 +6,15 @@ from pathlib import Path
 import dj_database_url
 from decouple import config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 ALLOWED_HOSTS.append('nonbreakable-maisha-pungently.ngrok-free.dev')
 
-# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -27,14 +23,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
-    # Third-party apps
     "rest_framework",
     "corsheaders",
-    # "django_celery_beat",  # Will add after initial migrations
     "django_extensions",
-    "drf_spectacular",  # API documentation
+    "drf_spectacular",  
     
-    # Local apps
     "apps.authentication",
     "apps.projects",
     "apps.github_integration",
@@ -43,7 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",  # CORS before CommonMiddleware
+    "corsheaders.middleware.CorsMiddleware",  
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -80,10 +73,8 @@ DATABASES = {
     )
 }
 
-# Custom User Model
 AUTH_USER_MODEL = 'authentication.User'
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -105,15 +96,12 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Media files
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # REST Framework Configuration
@@ -136,7 +124,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# drf-spectacular Configuration
 SPECTACULAR_SETTINGS = {
     'TITLE': 'AI Teacher API',
     'DESCRIPTION': 'AI-powered mentorship platform with automated code review and task management',
@@ -146,34 +133,27 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': '/api/v1/',
 }
 
-# CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     config('FRONTEND_URL', default='http://localhost:3000'),
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-# GitHub OAuth Configuration
 GITHUB_CLIENT_ID = config('GITHUB_CLIENT_ID', default='')
 GITHUB_CLIENT_SECRET = config('GITHUB_CLIENT_SECRET', default='')
 GITHUB_REDIRECT_URI = config('GITHUB_REDIRECT_URI', default='http://localhost:8000/api/v1/auth/github/callback/')
 GITHUB_WEBHOOK_SECRET = config('GITHUB_WEBHOOK_SECRET', default='')
 
-# Frontend URL
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:3000')
 
 
-# Gemini AI Configuration
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 
-# JWT Configuration
 JWT_SECRET_KEY = config('JWT_SECRET_KEY', default=SECRET_KEY)
 JWT_ALGORITHM = config('JWT_ALGORITHM', default='HS256')
 JWT_EXPIRATION_HOURS = config('JWT_EXPIRATION_HOURS', default=24, cast=int)
 
-# Encryption Configuration (for GitHub tokens)
 ENCRYPTION_KEY = config('ENCRYPTION_KEY', default='dev-encryption-key-32-chars-long')
 
-# Celery Configuration
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = config('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
@@ -181,13 +161,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
+CELERY_TASK_TIME_LIMIT = 30 * 60  
 
-# For local development without Redis, run tasks synchronously
 CELERY_TASK_ALWAYS_EAGER = DEBUG
 CELERY_TASK_EAGER_PROPAGATES = DEBUG
 
-# Redis Cache Fallback
 if DEBUG:
     CACHES = {
         'default': {
@@ -203,7 +181,6 @@ else:
         }
     }
 
-# Logging Configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -242,7 +219,6 @@ LOGGING = {
     },
 }
 
-# Security Settings (Production)
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True

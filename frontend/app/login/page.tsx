@@ -22,7 +22,7 @@ export default function LoginPage() {
             } catch (error: any) {
                 const clientId = 'Ov23liFYSEWlZRm0k8P9';
                 const redirectUri = encodeURIComponent('http://localhost:8000/api/v1/auth/github/callback/');
-                const fallbackUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email,read:user`;
+                const fallbackUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email,read:user,repo,admin:repo_hook`;
                 setLoginUrl(fallbackUrl);
             } finally {
                 setIsLoading(false);

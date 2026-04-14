@@ -25,7 +25,7 @@ class GitHubAuthService:
         params = {
             'client_id': settings.GITHUB_CLIENT_ID,
             'redirect_uri': settings.GITHUB_REDIRECT_URI,
-            'scope': 'read:user user:email repo',  # Permissions needed
+            'scope': 'read:user user:email repo admin:repo_hook',  
         }
         
         query_string = '&'.join([f"{k}={v}" for k, v in params.items()])
@@ -113,13 +113,11 @@ class GitHubAuthService:
             }
         )
         
-        # Update user data if not created
         if not created:
             user.github_username = github_username
             user.email = email or user.email
             user.avatar_url = github_user_data.get('avatar_url')
         
-        # Store encrypted access token
         user.github_access_token = access_token
         user.save()
         
