@@ -2,18 +2,26 @@
 Django settings for AI Teacher project.
 """
 
-from pathlib import Path
+import os
 import dj_database_url
 from decouple import config
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Auto-create logs directory for production logging
+LOGS_DIR = BASE_DIR / "logs"
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key')
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
+# Allow hosts from environment variable or standard locals
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
-ALLOWED_HOSTS.append('nonbreakable-maisha-pungently.ngrok-free.dev')
+# Add common development/deployment hosts
+ALLOWED_HOSTS.extend(['nonbreakable-maisha-pungently.ngrok-free.dev', 'ai-teacher-wugg.onrender.com'])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -182,11 +190,8 @@ else:
         }
     }
 
-import os
-LOGS_DIR = BASE_DIR / "logs"
-if not os.path.exists(LOGS_DIR):
-    os.makedirs(LOGS_DIR)
-    
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
