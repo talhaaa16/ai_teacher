@@ -30,6 +30,10 @@ redis
 python-dotenv
 Pillow
 
+# Production
+gunicorn
+whitenoise
+
 # Development
 django-extensions
 ipython
