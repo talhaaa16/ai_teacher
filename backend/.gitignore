@@ -72,8 +72,6 @@ celerybeat.pid
 
 dump.rdb
 
-migrations/
-
 model_list_full.txt
 model_list.txt
 UI_DESIGN_PROMPT.txt
