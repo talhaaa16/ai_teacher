@@ -1,4 +1,4 @@
-# AI Teacher
+# AI Mentor
 
 An AI-powered mentorship platform for junior developers. The AI acts as a Senior Developer — assigning real projects, reviewing your GitHub Pull Requests, and giving professional code feedback automatically using Google Gemini.
 
