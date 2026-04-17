@@ -24,28 +24,27 @@ class GeminiClient:
         """Find an available flash model."""
         preferred_models = [
             'gemini-2.5-flash',
+            'gemini-2.0-flash',
             'gemini-1.5-flash',
             'gemini-1.5-flash-8b',
-            'gemini-1.5-flash-latest'
         ]
         
         try:
             available_models = [m.name for m in self.client.models.list()]
             for preferred in preferred_models:
-                # Check for direct match or models/ prefix
+                name_with_prefix = f"models/{preferred}"
+                if name_with_prefix in available_models:
+                    return name_with_prefix
                 if preferred in available_models:
                     return preferred
-                if f"models/{preferred}" in available_models:
-                    return f"models/{preferred}"
             
-            # Fallback to the first available flash model found in the list
             for m in available_models:
                 if 'flash' in m.lower():
                     return m
                     
-            return 'gemini-1.5-flash' # Absolute fallback
+            return 'gemini-1.5-flash' # Hard fallback
         except Exception as e:
-            logger.error(f"Error listing models: {str(e)}")
+            logger.warning(f"Could not list models (possibly API key limit). Fallback to defaults. Error: {str(e)}")
             return 'gemini-1.5-flash'
     
     def generate_content(self, prompt: str, temperature: float = 0.7) -> str:
