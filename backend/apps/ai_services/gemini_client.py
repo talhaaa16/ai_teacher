@@ -17,8 +17,13 @@ class GeminiClient:
     
     def __init__(self):
         """Initialize Gemini client with API key."""
-        self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        api_key = settings.GEMINI_API_KEY
+        if not api_key or api_key == "your_gemini_api_key_here":
+            logger.error("!!! GEMINI_API_KEY is missing or invalid in settings !!!")
+            
+        self.client = genai.Client(api_key=api_key)
         self.model_id = self._find_available_model()
+        logger.info(f"Gemini initialized using model ID: {self.model_id}")
     
     def _find_available_model(self):
         """Find an available flash model."""
