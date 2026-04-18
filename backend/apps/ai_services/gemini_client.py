@@ -22,39 +22,9 @@ class GeminiClient:
             logger.error("!!! GEMINI_API_KEY is missing or invalid in settings !!!")
             
         self.client = genai.Client(api_key=api_key)
-        self.model_id = self._find_available_model()
+        # Use specifically requested model
+        self.model_id = 'gemini-2.5-flash'
         logger.info(f"Gemini initialized using model ID: {self.model_id}")
-    
-    def _find_available_model(self):
-        """Find an available flash model."""
-        preferred_models = [
-            'gemini-2.5-flash',
-            'gemini-2.0-flash',
-            'gemini-1.5-flash',
-            'gemini-1.5-flash-8b',
-        ]
-        
-        try:
-            # Try to list models to find the exact name
-            available_models = [m.name for m in self.client.models.list()]
-            for preferred in preferred_models:
-                # Check for both "model-name" and "models/model-name"
-                name_with_prefix = f"models/{preferred}"
-                if name_with_prefix in available_models:
-                    return name_with_prefix
-                if preferred in available_models:
-                    return preferred
-            
-            # If listing worked but preferred wasn't found, use the first 'flash' model
-            for m in available_models:
-                if 'flash' in m.lower():
-                    return m
-                    
-            return 'gemini-1.5-flash'
-        except Exception as e:
-            # If listing fails (501 UNIMPLEMENTED), use the short name directly
-            logger.warning(f"Could not list models (501 or key limit). Using short-name fallback. Error: {str(e)}")
-            return 'gemini-1.5-flash'
     
     def generate_content(self, prompt: str, temperature: float = 0.7) -> str:
         """
